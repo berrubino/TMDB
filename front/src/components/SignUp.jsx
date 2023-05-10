@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import useImput from "../hooks/useImput";
+import { BASE_ROUTE } from "../ruta";
 
 function SignUp() {
   const user = useImput();
@@ -11,15 +12,16 @@ function SignUp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     axios
-      .post("http://localhost:3001/api/users", {
+      .post(`${BASE_ROUTE}/api/users/signup`, {
         user: user.value,
         password: password.value,
         email: email.value,
         nacionalidad: nacionalidad.value,
         edad: edad.value,
       })
-      .then((resp) => console.log(resp))
+      .then((resp) => resp)
       .catch((error) => console.error(error));
   };
 

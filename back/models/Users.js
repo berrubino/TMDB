@@ -1,7 +1,16 @@
 const Sequelize = require("sequelize");
 const db = require("../db");
+const bcrypt = require("bcrypt");
 
-class Users extends Sequelize.Model {}
+class Users extends Sequelize.Model {
+  encryptedPw = (password, salt) => bcrypt.hash(password, salt);
+
+  validatepassword = (password) => {
+    return bcrypt
+      .hash(password, this.salt)
+      .then((hash) => hash === this.password);
+  };
+}
 
 Users.init(
   {
@@ -32,8 +41,19 @@ Users.init(
       type: Sequelize.ARRAY(Sequelize.JSON),
       defaultValue: [],
     },
+
+    salt: {
+      type: Sequelize.STRING,
+    },
   },
   { sequelize: db, modelName: "users" }
 );
+
+Users.addHook("beforeValidate", (user) => {
+  user.salt = bcrypt.genSaltSync(8);
+  return user
+    .encryptedPw(user.password, user.salt)
+    .then((hash) => (user.password = hash));
+});
 
 module.exports = Users;

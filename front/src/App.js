@@ -1,45 +1,32 @@
 import "./App.css";
-import axios from "axios";
 import Navbar from "./components/Navbar";
 import Grid from "./components/Grid";
-import Searcher from "./components/Searcher";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
-import { useEffect, useState } from "react";
+import Details from "./components/Details";
 import { Route, Routes } from "react-router";
-
+import { useContext, useEffect } from "react";
+import axios from "axios";
+import { BASE_ROUTE } from "./ruta";
+import { AuthContext } from "./context/AuthContext";
 function App() {
-  const baseURL = "https://api.themoviedb.org/3";
-  const APIkey = "2a3581a1386fcacdb3ba3949c96029f6";
-
-  const [movies, setMovies] = useState([]);
-
-  const fetchMovies = (searchKey) => {
-    const type = searchKey ? "search" : "discover";
-
-    axios
-      .get(`${baseURL}/${type}/movie`, {
-        params: { api_key: APIkey, query: type },
-      })
-      .then((res) => {
-        console.log(res);
-        setMovies(res.data.results);
-      });
-  };
+  const { logUser } = useContext(AuthContext);
 
   useEffect(() => {
-    fetchMovies();
+    axios
+      .get(`${BASE_ROUTE}/api/users/me`, { withCredentials: true })
+      .then((resp) => logUser(resp.data.user));
   }, []);
 
   return (
     <div className="App">
       <Navbar />
-      <Searcher />
 
       <Routes>
+        <Route path="/details/:id" element={<Details />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Grid movies={movies} />} />
+        <Route path="/" element={<Grid />} />
       </Routes>
     </div>
   );

@@ -1,10 +1,37 @@
-import React from "react";
+import React, { useContext } from "react";
+import axios from "axios";
+import useImput from "../hooks/useImput";
+import { BASE_ROUTE } from "../ruta";
+import { AuthContext } from "../context/AuthContext";
 
 function Login() {
+  const user = useImput();
+  const password = useImput();
+  const usuario = useContext(AuthContext);
+
+  console.log(usuario);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post(
+        `${BASE_ROUTE}/api/users/login`,
+        {
+          user: user.value,
+          password: password.value,
+        },
+        { withCredentials: true }
+      )
+      .then((user) => {
+        console.log("usuario", user.data);
+        usuario.logUser(user.data);
+      })
+      .catch((error) => console.error(error));
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <br></br>
-      <input type="hidden" name="usuario" value="true" />
       <div className="rounded-md shadow-sm">
         <div>
           <input
@@ -13,6 +40,7 @@ function Login() {
             required
             className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
             placeholder="Usuario"
+            {...user}
           />
         </div>
         <br></br>
@@ -24,19 +52,10 @@ function Login() {
             required
             className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
             placeholder="Password"
+            {...password}
           />
         </div>
         <br></br>
-        <div className="-mt-px">
-          <input
-            name="password"
-            aria-label="Password"
-            type="password"
-            required
-            className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
-            placeholder="Password"
-          />
-        </div>
       </div>
       <br></br>
       <div className="mt-6">

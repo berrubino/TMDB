@@ -5,10 +5,13 @@ const models = require("./models");
 const router = require("./routes");
 const PORT = process.env.PORT || 3001;
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 app.use(express.json());
 
-app.use(cors({ origin: true }));
+app.use(cookieParser());
+
+app.use(cors({ origin: `http://localhost:3000`, credentials: true }));
 
 app.use("/api", router);
 

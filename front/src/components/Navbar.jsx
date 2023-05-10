@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 function Navbar() {
+  const { name } = useContext(AuthContext);
+
+  console.log("name", name);
+
   return (
     <nav>
       <Link to="/">
@@ -13,9 +18,14 @@ function Navbar() {
       <Link to="/tvShows">
         <button>ProgramasTv</button>
       </Link>
-      <Link to="/login">
-        <button>LOGIN</button>
-      </Link>
+      {name ? (
+        ""
+      ) : (
+        <Link to="/login">
+          <button>LOGIN</button>
+        </Link>
+      )}
+
       <Link to="/signup">
         <button>SIGN UP</button>
       </Link>
