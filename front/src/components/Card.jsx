@@ -7,7 +7,7 @@ function Card({ movie }) {
   return (
     <div className="col">
       <Link to={`/details/${movie.id}`}>
-        <h3>{movie.title}</h3>
+        <h3>{movie.original_title || movie.name}</h3>
         {movie.poster_path ? (
           <img src={`${URL_IMG + movie.poster_path}`} alt="" height={600} />
         ) : (

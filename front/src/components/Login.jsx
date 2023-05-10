@@ -3,13 +3,13 @@ import axios from "axios";
 import useImput from "../hooks/useImput";
 import { BASE_ROUTE } from "../ruta";
 import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router";
 
 function Login() {
   const user = useImput();
   const password = useImput();
   const usuario = useContext(AuthContext);
-
-  console.log(usuario);
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,8 +23,8 @@ function Login() {
         { withCredentials: true }
       )
       .then((user) => {
-        console.log("usuario", user.data);
         usuario.logUser(user.data);
+        navigate("/");
       })
       .catch((error) => console.error(error));
   };

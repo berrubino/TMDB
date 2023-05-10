@@ -5,15 +5,29 @@ import { BASE_URL, BASE_ROUTE, API_KEY } from "../ruta";
 import Searcher from "./Searcher";
 import useImput from "../hooks/useImput";
 
-function Grid() {
+function Movies() {
   const search = useImput();
+
   const [movies, setMovies] = useState([]);
+  const [series, setSeries] = useState([]);
 
   const fetchMovies = (searchKey) => {
     const type = searchKey ? "search" : "discover";
 
     axios
       .get(`${BASE_URL}/${type}/movie`, {
+        params: { api_key: API_KEY, query: searchKey },
+      })
+      .then((res) => {
+        setMovies(res.data.results);
+      });
+  };
+
+  const fetchSeries = (searchKey) => {
+    const type = searchKey ? "search" : "discover";
+
+    axios
+      .get(`${BASE_URL}/${type}/tv`, {
         params: { api_key: API_KEY, query: searchKey },
       })
       .then((res) => {
@@ -46,4 +60,4 @@ function Grid() {
   );
 }
 
-export default Grid;
+export default Movies;
