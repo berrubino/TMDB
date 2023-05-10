@@ -37,10 +37,6 @@ Users.init(
       type: Sequelize.INTEGER,
       allowNull: false,
     },
-    favoritos: {
-      type: Sequelize.ARRAY(Sequelize.JSON),
-      defaultValue: [],
-    },
 
     salt: {
       type: Sequelize.STRING,

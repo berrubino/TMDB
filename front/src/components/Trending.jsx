@@ -6,6 +6,7 @@ import Card from "./Card";
 
 function Trending() {
   const [trending, setTrending] = useState([]);
+  const { name } = useContext(AuthContext);
 
   const fetchTrending = () => {
     axios
@@ -19,10 +20,9 @@ function Trending() {
     fetchTrending();
   }, []);
 
-  const { name } = useContext(AuthContext);
-
   return (
     <div>
+      <h1>bienvenido {name} a TMDB</h1>
       <div className="container">
         <div className="row">
           {trending[0] ? (
